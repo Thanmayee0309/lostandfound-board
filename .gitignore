@@ -1,0 +1,6 @@
+﻿node_modules/
+.vite/
+.vite-temp/
+dist/
+build/
+.env
