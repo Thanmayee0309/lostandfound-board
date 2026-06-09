@@ -1,0 +1,8 @@
+npm warn deprecated multer@1.4.5-lts.2: Multer 1.x is impacted by a number of vulnerabilities, which have been patched in 2.x. You should upgrade to the latest 2.x version.
+
+added 124 packages, and audited 125 packages in 17s
+
+19 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities

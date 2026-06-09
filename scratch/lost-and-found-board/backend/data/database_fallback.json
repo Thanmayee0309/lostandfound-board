@@ -1,0 +1,54 @@
+{
+  "users": [
+    {
+      "_id": "bq114efmq3ssca7",
+      "username": "riya",
+      "email": "riya@gmail.com",
+      "password": "$2a$10$1ZHwd2i1CFSmJKH/Q0PeQ.N5bLUyxaKAXY9BNDLkacuxuMeUzxh0u",
+      "role": "user",
+      "createdAt": "2026-06-07T13:08:20.911Z"
+    },
+    {
+      "_id": "4rzsnhvmq3stks1",
+      "username": "admin",
+      "email": "admin@vardhaman.org",
+      "password": "$2a$10$CZ/FJY9iCfK3Bzy0rKzGD.tKQPZqMHxJrqWYbyy1swsxnMwYl8Od.",
+      "role": "user",
+      "createdAt": "2026-06-07T13:09:18.577Z"
+    }
+  ],
+  "items": [
+    {
+      "_id": "80l0785mq3sz1ct",
+      "status": "open",
+      "createdAt": "2026-06-07T13:13:33.341Z",
+      "title": " brown wallet",
+      "description": "lost my wallet containing  my student id card, some cash, and my driving licencce",
+      "category": "Wallets & Cards",
+      "type": "lost",
+      "date": "2026-06-07T00:00:00.000Z",
+      "locationText": "near library first-floor ",
+      "latitude": null,
+      "longitude": null,
+      "imageUrl": "/uploads/1780838013325-Screenshot_2025-01-04_170708.png",
+      "userId": "4rzsnhvmq3stks1"
+    },
+    {
+      "_id": "uulh1q6mq3t0le2",
+      "status": "open",
+      "createdAt": "2026-06-07T13:14:45.962Z",
+      "title": "brown wallet",
+      "description": "Found a  brown wallet on the library floor. Contains ID cards and driving license.",
+      "category": "Wallets & Cards",
+      "type": "found",
+      "date": "2026-06-07T00:00:00.000Z",
+      "locationText": "near library first-floor ",
+      "latitude": null,
+      "longitude": null,
+      "imageUrl": "/uploads/1780838085957-Screenshot_2025-01-04_170708.png",
+      "userId": "bq114efmq3ssca7"
+    }
+  ],
+  "claims": [],
+  "notifications": []
+}
