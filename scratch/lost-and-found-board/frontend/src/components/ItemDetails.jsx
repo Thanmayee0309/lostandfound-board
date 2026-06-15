@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { api } from '../utils/api';
 
-export default function ItemDetails({ itemId, currentUser, onViewItem, onBack, triggerToast }) {
+export default function ItemDetails({ itemId, currentUser, onViewItem, onBack, triggerToast, onClaimSuccess }) {
   const [item, setItem] = useState(null);
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,6 +11,8 @@ export default function ItemDetails({ itemId, currentUser, onViewItem, onBack, t
 
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
+
+  const [myClaim, setMyClaim] = useState(null);
 
   // Fetch Item details and AI Matches
   useEffect(() => {
@@ -26,6 +28,22 @@ export default function ItemDetails({ itemId, currentUser, onViewItem, onBack, t
         if (itemData.status === 'open') {
           const matchesData = await api.getItemMatches(itemId);
           if (active) setMatches(matchesData);
+        }
+
+        // Fetch user's claim if status is claimed
+        if (itemData.status === 'claimed' && currentUser) {
+          try {
+            const sentClaims = await api.getClaims('sent');
+            const foundClaim = sentClaims.find(c => {
+              const cItemId = c.itemId?._id || c.itemId;
+              return cItemId === itemId && c.status === 'pending';
+            });
+            if (foundClaim && active) {
+              setMyClaim(foundClaim);
+            }
+          } catch (cErr) {
+            console.error('Failed to fetch user claims:', cErr);
+          }
         }
       } catch (err) {
         triggerToast(err.message, 'error');
@@ -88,13 +106,17 @@ export default function ItemDetails({ itemId, currentUser, onViewItem, onBack, t
 
     setSubmittingClaim(true);
     try {
-      await api.submitClaim(item._id, verificationAnswer);
-      triggerToast('Claim submitted successfully! The owner has been notified.', 'success');
+      const claim = await api.submitClaim(item._id, verificationAnswer);
+      triggerToast('Claim submitted successfully! Opening verification chat...', 'success');
       setShowClaimModal(false);
       
-      // Refresh item state
-      const updatedItem = await api.getItem(item._id);
-      setItem(updatedItem);
+      if (onClaimSuccess && claim && claim._id) {
+        onClaimSuccess(claim._id);
+      } else {
+        // Refresh item state
+        const updatedItem = await api.getItem(item._id);
+        setItem(updatedItem);
+      }
     } catch (err) {
       triggerToast(err.message, 'error');
     } finally {
@@ -172,7 +194,7 @@ export default function ItemDetails({ itemId, currentUser, onViewItem, onBack, t
             </div>
             
             <span className={`status-pill status-${item.status}`}>
-              Status: {item.status}
+              Status: {item.status === 'claimed' ? 'Claim Pending' : item.status}
             </span>
           </div>
 
@@ -184,8 +206,7 @@ export default function ItemDetails({ itemId, currentUser, onViewItem, onBack, t
 
           {item.imageUrl && (
             <div className="item-details-image">
-              <img src={`http://localhost:5000${item.imageUrl}`} alt={item.title} />
-            </div>
+<img src={`https://lostandfound-boardkmt.onrender.com${item.imageUrl}`} alt={item.title} />            </div>
           )}
 
           <div>
@@ -231,7 +252,13 @@ export default function ItemDetails({ itemId, currentUser, onViewItem, onBack, t
               </button>
             )}
             
-            {!isOwner && item.status === 'claimed' && (
+            {!isOwner && item.status === 'claimed' && myClaim && (
+              <button onClick={() => onClaimSuccess(myClaim._id)} className="btn btn-primary">
+                💬 Open Verification Chat
+              </button>
+            )}
+
+            {!isOwner && item.status === 'claimed' && !myClaim && (
               <button disabled className="btn btn-secondary">
                 ⏳ Claim Pending Review
               </button>

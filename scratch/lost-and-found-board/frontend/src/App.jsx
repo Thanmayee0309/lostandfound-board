@@ -14,6 +14,7 @@ export default function App() {
   
   const [activeTab, setActiveTab] = useState('dashboard');
   const [activeItemId, setActiveItemId] = useState(null);
+  const [selectedClaimId, setSelectedClaimId] = useState(null);
   
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -104,6 +105,7 @@ export default function App() {
           setActiveItemId(notif.relatedId);
           setActiveTab('dashboard');
         } else if (notif.type === 'claim') {
+          setSelectedClaimId(notif.relatedId);
           setActiveTab('claims');
         }
       }
@@ -264,13 +266,13 @@ export default function App() {
         {activeTab === 'dashboard' && !activeItemId && (
           <div className="flyer-banner">
             <div>
-              <div className="flyer-meta">Vardhaman College of Engineering • Summer Projects 2024-25</div>
+           <div className="flyer-meta"> Vardhaman College Of Engineering</div>
               <h1 className="flyer-title">Lost & Found Board</h1>
               <div className="flyer-subtitle">
                 Reuniting students with their lost belongings through a smart campus board.
               </div>
             </div>
-            <div className="easy-tag">Easy</div>
+           
           </div>
         )}
 
@@ -283,6 +285,11 @@ export default function App() {
               onViewItem={handleViewItem}
               onBack={() => setActiveItemId(null)} 
               triggerToast={triggerToast}
+              onClaimSuccess={(claimId) => {
+                setSelectedClaimId(claimId);
+                setActiveTab('claims');
+                setActiveItemId(null);
+              }}
             />
           ) : (
             <Dashboard 
@@ -299,6 +306,8 @@ export default function App() {
           <ClaimModerator 
             triggerToast={triggerToast} 
             onViewItem={handleViewItem}
+            selectedClaimId={selectedClaimId}
+            setSelectedClaimId={setSelectedClaimId}
           />
         ) : activeTab === 'profile' ? (
           <Profile 

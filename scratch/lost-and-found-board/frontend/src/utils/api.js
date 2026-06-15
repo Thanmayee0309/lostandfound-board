@@ -1,5 +1,4 @@
-const BASE_URL = 'http://localhost:5000/api';
-
+const BASE_URL = 'https://lostandfound-boardkmt.onrender.com/api';
 const getHeaders = (isMultipart = false) => {
   const token = localStorage.getItem('token');
   const headers = {};
@@ -165,6 +164,24 @@ export const api = {
     const res = await fetch(`${BASE_URL}/notifications`, {
       method: 'PUT',
       headers: getHeaders()
+    });
+    return handleResponse(res);
+  },
+
+  // Chat Messages
+  async getClaimMessages(claimId) {
+    const res = await fetch(`${BASE_URL}/claims/${claimId}/messages`, {
+      method: 'GET',
+      headers: getHeaders()
+    });
+    return handleResponse(res);
+  },
+
+  async sendClaimMessage(claimId, text) {
+    const res = await fetch(`${BASE_URL}/claims/${claimId}/messages`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({ text })
     });
     return handleResponse(res);
   }
