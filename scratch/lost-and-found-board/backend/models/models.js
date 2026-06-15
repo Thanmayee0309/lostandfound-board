@@ -48,10 +48,18 @@ const NotificationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const MessageSchema = new mongoose.Schema({
+  claimId: { type: mongoose.Schema.Types.ObjectId, ref: 'Claim', required: true },
+  senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  text: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
 const MongoUser = mongoose.model('User', UserSchema);
 const MongoItem = mongoose.model('Item', ItemSchema);
 const MongoClaim = mongoose.model('Claim', ClaimSchema);
 const MongoNotification = mongoose.model('Notification', NotificationSchema);
+const MongoMessage = mongoose.model('Message', MessageSchema);
 
 // ==========================================
 // 2. FALLBACK JSON DATABASE CONTROLLER
@@ -62,9 +70,11 @@ const DB_FILE = path.join(__dirname, '../data/database_fallback.json');
 function readDb() {
   try {
     const data = fs.readFileSync(DB_FILE, 'utf8');
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    if (!parsed.messages) parsed.messages = [];
+    return parsed;
   } catch (err) {
-    return { users: [], items: [], claims: [], notifications: [] };
+    return { users: [], items: [], claims: [], notifications: [], messages: [] };
   }
 }
 
@@ -379,9 +389,57 @@ const Notification = {
   }
 };
 
+const Message = {
+  async find(filter = {}) {
+    if (!dbConfig.useFallback()) {
+      return await MongoMessage.find(filter).populate('senderId', 'username email').sort({ createdAt: 1 });
+    }
+    const db = readDb();
+    let results = db.messages || [];
+    
+    if (Object.keys(filter).length > 0) {
+      results = results.filter(msg => {
+        for (let key in filter) {
+          if (filter[key] !== undefined && msg[key] !== filter[key]) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }
+
+    const populated = results.map(msg => ({
+      ...msg,
+      senderId: populateUser(msg.senderId, db)
+    }));
+    
+    return populated.sort((a, b) => new Date(a.createdAt) - new Date(a.createdAt));
+  },
+
+  async create(data) {
+    if (!dbConfig.useFallback()) {
+      return await MongoMessage.create(data);
+    }
+    const db = readDb();
+    if (!db.messages) db.messages = [];
+    const newMsg = {
+      _id: generateId(),
+      createdAt: new Date().toISOString(),
+      ...data
+    };
+    db.messages.push(newMsg);
+    writeDb(db);
+    return {
+      ...newMsg,
+      senderId: populateUser(newMsg.senderId, db)
+    };
+  }
+};
+
 module.exports = {
   User,
   Item,
   Claim,
-  Notification
+  Notification,
+  Message
 };

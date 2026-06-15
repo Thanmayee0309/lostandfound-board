@@ -15,12 +15,28 @@
       "password": "$2a$10$CZ/FJY9iCfK3Bzy0rKzGD.tKQPZqMHxJrqWYbyy1swsxnMwYl8Od.",
       "role": "user",
       "createdAt": "2026-06-07T13:09:18.577Z"
+    },
+    {
+      "_id": "ddt993mmq6u0otj",
+      "username": "Dhruvin",
+      "email": "dhruv@vardhaman.org",
+      "password": "$2a$10$IyexMfQXthKdHZORWLPfbOX3DDaQkakHBBR8QhQHk3tp3XaqI5fMe",
+      "role": "user",
+      "createdAt": "2026-06-09T16:06:08.551Z"
+    },
+    {
+      "_id": "v7msaqgmq6u61bn",
+      "username": "Meenakshi Srinivas",
+      "email": "srinivasM@vardhaman.org",
+      "password": "$2a$10$Xdr4iS04CAbSlZI5k2Eb1ewq.X.2TGaU8S3vBzr8.NAtm9lr90dJa",
+      "role": "user",
+      "createdAt": "2026-06-09T16:10:18.035Z"
     }
   ],
   "items": [
     {
       "_id": "80l0785mq3sz1ct",
-      "status": "open",
+      "status": "resolved",
       "createdAt": "2026-06-07T13:13:33.341Z",
       "title": " brown wallet",
       "description": "lost my wallet containing  my student id card, some cash, and my driving licencce",
@@ -35,7 +51,7 @@
     },
     {
       "_id": "uulh1q6mq3t0le2",
-      "status": "open",
+      "status": "resolved",
       "createdAt": "2026-06-07T13:14:45.962Z",
       "title": "brown wallet",
       "description": "Found a  brown wallet on the library floor. Contains ID cards and driving license.",
@@ -47,8 +63,152 @@
       "longitude": null,
       "imageUrl": "/uploads/1780838085957-Screenshot_2025-01-04_170708.png",
       "userId": "bq114efmq3ssca7"
+    },
+    {
+      "_id": "24s7zarmq6tzo04",
+      "status": "resolved",
+      "createdAt": "2026-06-09T16:05:20.836Z",
+      "title": "keychain",
+      "description": "i lost my keychain , it is a penguin craved on stone in black color",
+      "category": "Keys & ID Cards",
+      "type": "lost",
+      "date": "2026-06-06T00:00:00.000Z",
+      "locationText": "near canteen",
+      "latitude": null,
+      "longitude": null,
+      "imageUrl": "/uploads/1781021120825-Screenshot_2025-05-09_142408.png",
+      "userId": "bq114efmq3ssca7"
+    },
+    {
+      "_id": "i2usdvxmq6u2nku",
+      "status": "open",
+      "createdAt": "2026-06-09T16:07:40.254Z",
+      "title": "Hp charger",
+      "description": "i lost my HP charger of 65W , it has anime skin ",
+      "category": "Electronics",
+      "type": "lost",
+      "date": "2026-06-03T00:00:00.000Z",
+      "locationText": "1st block 1130 room",
+      "latitude": null,
+      "longitude": null,
+      "imageUrl": "/uploads/1781021260250-Screenshot_2025-06-11_220331.png",
+      "userId": "ddt993mmq6u0otj"
+    },
+    {
+      "_id": "ivwkf5qmq7iygzy",
+      "status": "claimed",
+      "createdAt": "2026-06-10T03:44:15.502Z",
+      "title": "black wallet",
+      "description": "i found a black wallet with s - symbol on its top also it has student id card",
+      "category": "Wallets & Cards",
+      "type": "found",
+      "date": "2026-06-08T00:00:00.000Z",
+      "locationText": "2nd block",
+      "latitude": null,
+      "longitude": null,
+      "imageUrl": "",
+      "userId": "bq114efmq3ssca7"
     }
   ],
-  "claims": [],
-  "notifications": []
+  "claims": [
+    {
+      "_id": "rpz1uzvmq69vl06",
+      "status": "approved",
+      "createdAt": "2026-06-09T06:42:18.006Z",
+      "itemId": "80l0785mq3sz1ct",
+      "claimantId": "bq114efmq3ssca7",
+      "ownerId": "4rzsnhvmq3stks1",
+      "verificationAnswer": "i lost my brown wallet near library i guess that is my wallet"
+    },
+    {
+      "_id": "n703hormq6u6peb",
+      "status": "approved",
+      "createdAt": "2026-06-09T16:10:49.235Z",
+      "itemId": "24s7zarmq6tzo04",
+      "claimantId": "v7msaqgmq6u61bn",
+      "ownerId": "bq114efmq3ssca7",
+      "verificationAnswer": "ds"
+    },
+    {
+      "_id": "jxhbxixmqevd5co",
+      "status": "pending",
+      "createdAt": "2026-06-15T07:05:58.872Z",
+      "itemId": "ivwkf5qmq7iygzy",
+      "claimantId": "v7msaqgmq6u61bn",
+      "ownerId": "bq114efmq3ssca7",
+      "verificationAnswer": "black wallet with S symbol"
+    }
+  ],
+  "notifications": [
+    {
+      "_id": "fjtgfckmq69vl0b",
+      "read": true,
+      "createdAt": "2026-06-09T06:42:18.011Z",
+      "userId": "4rzsnhvmq3stks1",
+      "message": "New Claim submitted! Someone claimed your posted item: \" brown wallet\". Verify their answer.",
+      "type": "claim",
+      "relatedId": "rpz1uzvmq69vl06"
+    },
+    {
+      "_id": "s0tc8remq69w5vh",
+      "read": true,
+      "createdAt": "2026-06-09T06:42:45.053Z",
+      "userId": "bq114efmq3ssca7",
+      "message": "Congratulations! Your claim for \" brown wallet\" has been APPROVED. Arrange with owner to retrieve it.",
+      "type": "claim",
+      "relatedId": "rpz1uzvmq69vl06"
+    },
+    {
+      "_id": "l1ojv1cmq6u6pel",
+      "read": true,
+      "createdAt": "2026-06-09T16:10:49.245Z",
+      "userId": "bq114efmq3ssca7",
+      "message": "New Claim submitted! Someone claimed your posted item: \"keychain\". Verify their answer.",
+      "type": "claim",
+      "relatedId": "n703hormq6u6peb"
+    },
+    {
+      "_id": "6lvf1xxmq6u7han",
+      "read": true,
+      "createdAt": "2026-06-09T16:11:25.391Z",
+      "userId": "v7msaqgmq6u61bn",
+      "message": "Congratulations! Your claim for \"keychain\" has been APPROVED. Arrange with owner to retrieve it.",
+      "type": "claim",
+      "relatedId": "n703hormq6u6peb"
+    },
+    {
+      "_id": "5z2zf5kmqevd5cz",
+      "read": true,
+      "createdAt": "2026-06-15T07:05:58.883Z",
+      "userId": "bq114efmq3ssca7",
+      "message": "New Claim submitted! Someone claimed your posted item: \"black wallet\". Verify their answer.",
+      "type": "claim",
+      "relatedId": "jxhbxixmqevd5co"
+    },
+    {
+      "_id": "6y9c50ymqfbndnr",
+      "read": false,
+      "createdAt": "2026-06-15T14:41:50.055Z",
+      "userId": "v7msaqgmq6u61bn",
+      "message": "New message from riya regarding claim for \"black wallet\": \"are u sure its yours?\"",
+      "type": "claim",
+      "relatedId": "jxhbxixmqevd5co"
+    }
+  ],
+  "messages": [
+    {
+      "_id": "w5bqah7mqevd5cs",
+      "createdAt": "2026-06-15T07:05:58.876Z",
+      "claimId": "jxhbxixmqevd5co",
+      "senderId": "v7msaqgmq6u61bn",
+      "text": "black wallet with S symbol"
+    },
+    {
+      "_id": "zyjv0sqmqfbndnp",
+      "createdAt": "2026-06-15T14:41:50.053Z",
+      "claimId": "jxhbxixmqevd5co",
+      "senderId": "bq114efmq3ssca7",
+      "text": "are u sure its yours?"
+    }
+  ]
 }

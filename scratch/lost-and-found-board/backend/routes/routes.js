@@ -6,7 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { User, Item, Claim, Notification } = require('../models/models');
+const { User, Item, Claim, Notification, Message } = require('../models/models');
 const { protect, admin } = require('../middleware/auth');
 const aiEngine = require('../utils/aiEngine');
 
@@ -339,6 +339,13 @@ router.post('/claims', protect, async (req, res) => {
       verificationAnswer
     });
 
+    // Automatically create the first message in the chat conversation
+    await Message.create({
+      claimId: claim._id,
+      senderId: req.user._id,
+      text: verificationAnswer
+    });
+
     // Update item status to 'claimed' (pending review)
     await Item.findByIdAndUpdate(itemId, { status: 'claimed' });
 
@@ -505,6 +512,81 @@ router.put('/notifications', protect, async (req, res) => {
       fs.writeFileSync(DB_FILE, JSON.stringify(dbData, null, 2));
     }
     res.json({ message: 'All notifications marked as read' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// ==========================================
+// CHAT MESSAGES ENDPOINTS
+// ==========================================
+
+// Get Messages for a Claim Chat
+router.get('/claims/:claimId/messages', protect, async (req, res) => {
+  try {
+    const claim = await Claim.findById(req.params.claimId);
+    if (!claim) {
+      return res.status(404).json({ message: 'Claim not found' });
+    }
+
+    const claimantId = claim.claimantId._id ? claim.claimantId._id.toString() : claim.claimantId.toString();
+    const ownerId = claim.ownerId._id ? claim.ownerId._id.toString() : claim.ownerId.toString();
+
+    // Verify requesting user is claimant, owner, or admin
+    if (claimantId !== req.user._id.toString() && ownerId !== req.user._id.toString() && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Not authorized to access this chat' });
+    }
+
+    const messages = await Message.find({ claimId: req.params.claimId });
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Send a Message in a Claim Chat
+router.post('/claims/:claimId/messages', protect, async (req, res) => {
+  try {
+    const { text } = req.body;
+    if (!text || text.trim() === '') {
+      return res.status(400).json({ message: 'Message text cannot be empty' });
+    }
+
+    const claim = await Claim.findById(req.params.claimId);
+    if (!claim) {
+      return res.status(404).json({ message: 'Claim not found' });
+    }
+
+    const claimantId = claim.claimantId._id ? claim.claimantId._id.toString() : claim.claimantId.toString();
+    const ownerId = claim.ownerId._id ? claim.ownerId._id.toString() : claim.ownerId.toString();
+
+    // Verify requesting user is claimant or owner
+    if (claimantId !== req.user._id.toString() && ownerId !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to send messages in this chat' });
+    }
+
+    const newMessage = await Message.create({
+      claimId: req.params.claimId,
+      senderId: req.user._id,
+      text: text.trim()
+    });
+
+    // Notify the other user in the chat
+    const recipientId = (req.user._id.toString() === claimantId) ? ownerId : claimantId;
+    const senderName = req.user.username;
+    
+    // Fetch item title for context
+    const item = await Item.findById(claim.itemId._id || claim.itemId);
+    const itemTitle = item ? item.title : 'item';
+
+    await Notification.create({
+      userId: recipientId,
+      message: `New message from ${senderName} regarding claim for "${itemTitle}": "${text.substring(0, 30)}${text.length > 30 ? '...' : ''}"`,
+      type: 'claim',
+      relatedId: claim._id.toString()
+    });
+
+    res.status(201).json(newMessage);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
