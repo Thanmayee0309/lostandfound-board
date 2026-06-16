@@ -7,6 +7,7 @@ const fs = require('fs');
 const { connectDB } = require('./config/db');
 const routes = require('./routes/routes');
 
+
 const app = express();
 
 // Middleware
